@@ -3,21 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;1,400&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <title>Vue Boolzapp</title>
 </head>
-<body>
+    <body>
+        <div id="app">
+            <div class="container h-100">
+                <div class="row h-100 flex-nowrap">
+                    <!-- Barra laterale dei contatti -->
+                    <div class="col-12 col-md-4 bg-white">
+                        <!-- Header della barra laterale -->
+                        <div class="row h-100 flex-column flex-nowrap">
+                            <div class="col-12 header d-flex justify-content-between align-items-center p-2">
+                                <div class="d-flex align-items-center">
+                                    <img src="img/avatar_io.jpg" alt="img-profilo">
+                                    <span class="px-1">Augusto</span>
+                                </div>
+                                <div class="my-user-icons">
+                                    <i class="fas fa-circle-notch mx-2"></i>
+                                    <i class="fas fa-envelope mx-2"></i>
+                                    <i class="fas fa-ellipsis-vertical mx-2"></i>
+                                </div>
+                            </div>
+                            <!-- Notifiche -->
+                            <div class="col-12 d-flex justify-content-start align-items-center bg-notification p-2">
+                                <i class="fas fa-bell-slash"></i>
+                                <div>
+                                    <span>Ricevi notifiche di nuovi messaggi</span><br>
+                                    <span class="color-grey">Attiva notifiche desktop</span>
+                                </div>
+                            </div>
+                            <!-- Barra di ricerca -->
+                            <div class="col-12 p-2 header">
+                                <div class="search d-flex align-items-center">
+                                    <button class="border-0"><i class="fa-solid fa-magnifying-glass"></i></i></button>
+                                    <input type="text" placeholder="Cerca o inizia una nuova chat" class="w-100 border-0">
+                                </div>
+                            </div>
+                            <!-- Lista dei contatti -->
+                            <div class="col-12 flex-grow-1 overflow-y-hidden py-2">
+                                <div v-for="contact in contacts" :key="contact.id" class="contact py-1 px-2 border-bottom">
+                                    <img :src="contact.avatar" alt="img-profilo">
+                                    <span class="px-2 align-top">{{ contact.name }}</span>
+                                </div>
+                                <!-- Aggiungi altri contatti qui -->
+                            </div>
+                        </div>
+                    </div>
+    
+                    <!-- Finestra di chat -->
+                    <div class="col-12 col-md-8 h-100">
+                        <!-- Header della finestra di chat -->
+                        <div class="row h-100 flex-nowrap flex-column">
+                            <div class="col-12 d-flex justify-content-between header p-2">
+                                <div class="d-flex align-items-center">
+                                    <img src="img/avatar_1.jpg" alt="img-profilo">
+                                    <span>Michele</span>
+                                </div>
+                                <div class="my-user-icons mt-2">
+                                    <i class="fas fa-search mx-2"></i>
+                                    <i class="fas fa-paperclip mx-2"></i>
+                                    <i class="fas fa-ellipsis-vertical mx-2"></i>
+                                </div>
+                            </div>
+                            <!-- Chat section -->
+                            <div class="col-12 col-md-8 section-chat">
+                            
+                            </div>
+                            <!-- Input per i messaggi -->
+                            <div class="col-12 col-md-8 mt-auto header p-2 w-100  ">
+                                <div class="message-input d-flex align-items-center justify-content-between">
+                                    <i class="fa-regular fa-face-smile px-5"></i>
+                                    <input type="text" placeholder="Scrivi un messaggio"  class="w-75 py-2 border-0">
+                                    <i class="fas fa-microphone px-3"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-
-
-
-
-
-
-    <script src="https://unpkg.com/vue@3"></script>
-    <script src="js/script.js"></script>
+        <script src="https://unpkg.com/vue@3"></script>
+        <script src="js/script.js"></script>
 </body>
 </html>
