@@ -43,15 +43,13 @@
                             <div class="col-12 p-2 header">
                                 <div class="input-group d-flex  align-items-center">
                                     <span class="border-0 input-group-text"><i class="fa-solid fa-magnifying-glass p-1 bg-white "></i></span>
-                                    <input type="text" placeholder="Cerca o inizia una nuova chat" class="form-control">
+                                    <input  type="text" placeholder="Cerca o inizia una nuova chat" class="form-control" v-model="search">
                                 </div>
                             </div>
                             <!-- Lista dei contatti -->
                             <div class="col-12 flex-grow-1 overflow-y-auto py-2 h0">
-                                <div :class="{'active' : index === activeContactIndex}" v-for="(contact, index) in contacts" :key="contact.id"
-                                @click="selectContact(contact.id)"
-                                class="contact py-1 px-2 border-bottom d-flex">
-                                <div>
+                                <div :class="{'active' : index === activeContactIndex}" v-for="(contact, index) in filteredContacts" :key="contact.id" @click="selectContact(contact.id)" class="contact py-1 px-2 border-bottom d-flex">
+                                    <div>
                                     <img :src="contact.avatar" alt="img-profilo">
 
                                 </div>

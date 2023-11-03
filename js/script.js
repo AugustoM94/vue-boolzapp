@@ -5,7 +5,8 @@ createApp ({
         return {
           activeContactIndex: 0,
           message:'',
-          response: '',         
+          response: '',
+          search: '',         
              contacts: [
                 {
                     id: 1,
@@ -203,5 +204,10 @@ createApp ({
                 });
             }, 1000);
     }
-}
+},
+        computed: {
+            filteredContacts() {
+                return this.contacts.filter(contact => contact.name.toLowerCase().includes(this.search.toLowerCase()));
+            },
+        },
 }) .mount('#app');

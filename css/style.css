@@ -87,11 +87,13 @@ img {
     margin: 5px;
     border-radius:  10px;
     margin-left: auto;
+    width: 300px;
    
 }
 
 .received {
-    background-color: #E0E0E0;
+    background-color:var(--color-white);
+    width: 200px;
     padding: 10px;
     margin: 5px;
     border-radius:  10px;
@@ -103,7 +105,10 @@ small {
     color: var(--color-text-grey);
 }
 
-
+.msg {
+    font-size: .8rem;
+    font-weight: bold;
+}
 
 
 
