@@ -83,7 +83,7 @@
                                 </div>
                             </div>
                             <!-- Chat section -->
-                            <div class="col-12 col-md-8 section-chat flex-grow-1 h0">
+                            <div class="col-12 col-md-8 section-chat flex-grow-1 h0 overflow-y-auto">
                             <div class="d-flex py-3" v-for="(msg, index) in contacts[activeContactIndex].messages" :key="index">
                                 <div class="msg" :class="msg.status">{{msg.message}}</div>
                             </div>
@@ -92,9 +92,10 @@
                             <div class="col-12 col-md-8 mt-auto header p-2 w-100  ">
                                 <div class="message-input d-flex align-items-center justify-content-between">
                                     <i class="fa-regular fa-face-smile px-5"></i>
-                                    <input type="text" placeholder="Scrivi un messaggio"  class="w-75 py-2 border-0">
+                                    <input type="text" placeholder="Scrivi un messaggio"  class="w-75 py-2 border-0"v-model="message"
+                                    @keyup.enter="sendMessage">
                                     <i class="fas fa-microphone px-3"></i>
-                                    <i class="fa-solid fa-paper-plane px-1" style="color: #000000;"></i>
+                                    <i class="fa-solid fa-paper-plane px-1" style="color: #000000;" @click="sendMessage"></i>
                                 </div>
                             </div>
                         </div>

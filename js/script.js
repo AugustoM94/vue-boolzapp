@@ -4,7 +4,8 @@ createApp ({
     data() {
         return {
           activeContactIndex: 0,
-          message:'',         
+          message:'',
+          response: '',         
              contacts: [
                 {
                     id: 1,
@@ -185,6 +186,22 @@ createApp ({
             if(index !== -1){
                 this.activeContactIndex = index;
             }
-        }
+        },
+        sendMessage() {
+            if (!this.message) return;
+            this.contacts[this.activeContactIndex].messages.push({
+                date: new Date().toLocaleString(),
+                message: this.message,
+                status: 'sent',
+            });
+            this.message = ''; 
+            setTimeout(() => {
+                this.contacts[this.activeContactIndex].messages.push({
+                    date: new Date().toLocaleString(),
+                    message: 'ok',
+                    status: 'received',
+                });
+            }, 1000);
     }
+}
 }) .mount('#app');
