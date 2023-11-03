@@ -19,7 +19,7 @@
 
 body {
     font-family: 'Lato', sans-serif;
-    cursor: default;
+    cursor: pointer;
     background: var(--background);
 
 }
@@ -32,10 +32,11 @@ img {
     background-color: var(--color-headers);
 }
 
+
 #app {
     width: 100%;
     height: 100vh;
-    padding: 40px;
+    padding: 20px;
 }
 .h0 {
     height: 0;
@@ -73,7 +74,7 @@ img {
 .section-chat {
     background-image: url(/img/mine.jpg);
     width: 100%;
-    height: 82%;
+    height: 78%;
 }
 
 .message-input i {
@@ -85,19 +86,22 @@ img {
     padding: 10px;
     margin: 5px;
     border-radius:  10px;
+    margin-left: auto;
    
 }
 
 .received {
     background-color: #E0E0E0;
-    width: 25%; 
     padding: 10px;
     margin: 5px;
     border-radius:  10px;
-
+    margin-right: auto;
 }
 
-
+small {
+    font-size: .7rem;
+    color: var(--color-text-grey);
+}
 
 
 

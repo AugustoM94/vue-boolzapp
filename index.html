@@ -20,7 +20,7 @@
                     <div class="col-12 col-md-4 bg-white">
                         <!-- Header della barra laterale -->
                         <div class="row h-100 flex-column flex-nowrap">
-                            <div class="col-12 header d-flex justify-content-between align-items-center p-2">
+                            <div class="col-12 header d-flex justify-content-between align-items-center p-2 border-end">
                                 <div class="d-flex align-items-center">
                                     <img src="img/avatar_io.jpg" alt="img-profilo">
                                     <span class="px-1">Augusto</span>
@@ -41,30 +41,40 @@
                             </div>
                             <!-- Barra di ricerca -->
                             <div class="col-12 p-2 header">
-                                <div class="search d-flex align-items-center">
-                                    <button class="border-0"><i class="fa-solid fa-magnifying-glass"></i></i></button>
-                                    <input type="text" placeholder="Cerca o inizia una nuova chat" class="w-100 border-0">
+                                <div class="input-group d-flex  align-items-center">
+                                    <span class="border-0 input-group-text"><i class="fa-solid fa-magnifying-glass p-1 bg-white "></i></span>
+                                    <input type="text" placeholder="Cerca o inizia una nuova chat" class="form-control">
                                 </div>
                             </div>
                             <!-- Lista dei contatti -->
-                            <div class="col-12 flex-grow-1 overflow-y-hidden py-2">
-                                <div v-for="contact in contacts" :key="contact.id" class="contact py-1 px-2 border-bottom">
+                            <div class="col-12 flex-grow-1 overflow-y-auto py-2 h0">
+                                <div :class="{'active' : index === activeContactIndex}" v-for="(contact, index) in contacts" :key="contact.id"
+                                @click="selectContact(contact.id)"
+                                class="contact py-1 px-2 border-bottom d-flex">
+                                <div>
                                     <img :src="contact.avatar" alt="img-profilo">
-                                    <span class="px-2 align-top">{{ contact.name }}</span>
+
                                 </div>
-                                <!-- Aggiungi altri contatti qui -->
+                                <div class="ms-2">
+                                    <span class="px-2 align-top">{{ contact.name }}</span><br>
+                                    <small>{{contact.messages[contact.messages.length - 1].message}}</small> 
+                                </div>
+                                </div>
                             </div>
                         </div>
                     </div>
     
                     <!-- Finestra di chat -->
-                    <div class="col-12 col-md-8 h-100">
+                    <div class="col-12 col-md-8">
                         <!-- Header della finestra di chat -->
                         <div class="row h-100 flex-nowrap flex-column">
                             <div class="col-12 d-flex justify-content-between header p-2">
-                                <div class="d-flex align-items-center">
-                                    <img src="img/avatar_1.jpg" alt="img-profilo">
-                                    <span>Michele</span>
+                                <div  class="d-flex">
+                                    <img :src="contacts[activeContactIndex].avatar" alt="img-profilo">
+                                    <div class="ms-2">
+                                        <span>{{contacts[activeContactIndex].name}}</span><br>
+                                        <small>Ultimo accesso {{contacts[activeContactIndex].messages[contacts[activeContactIndex].messages.length - 1].date}}</small>
+                                    </div>                            
                                 </div>
                                 <div class="my-user-icons mt-2">
                                     <i class="fas fa-search mx-2"></i>
@@ -73,8 +83,10 @@
                                 </div>
                             </div>
                             <!-- Chat section -->
-                            <div class="col-12 col-md-8 section-chat">
-                            
+                            <div class="col-12 col-md-8 section-chat flex-grow-1 h0">
+                            <div class="d-flex py-3" v-for="(msg, index) in contacts[activeContactIndex].messages" :key="index">
+                                <div class="msg" :class="msg.status">{{msg.message}}</div>
+                            </div>
                             </div>
                             <!-- Input per i messaggi -->
                             <div class="col-12 col-md-8 mt-auto header p-2 w-100  ">
@@ -82,6 +94,7 @@
                                     <i class="fa-regular fa-face-smile px-5"></i>
                                     <input type="text" placeholder="Scrivi un messaggio"  class="w-75 py-2 border-0">
                                     <i class="fas fa-microphone px-3"></i>
+                                    <i class="fa-solid fa-paper-plane px-1" style="color: #000000;"></i>
                                 </div>
                             </div>
                         </div>
