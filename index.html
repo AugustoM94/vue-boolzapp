@@ -6,103 +6,128 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;1,400&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <title>Vue Boolzapp</title>
 </head>
-    <body>
-        <div id="app">
-            <div class="container h-100">
-                <div class="row h-100 flex-nowrap">
-                    <!-- Barra laterale dei contatti -->
-                    <div class="col-12 col-md-4 bg-white">
-                        <!-- Header della barra laterale -->
-                        <div class="row h-100 flex-column flex-nowrap">
-                            <div class="col-12 header d-flex justify-content-between align-items-center p-2 border-end">
-                                <div class="d-flex align-items-center">
-                                    <img src="img/avatar_io.jpg" alt="img-profilo">
-                                    <span class="px-1">Augusto</span>
-                                </div>
-                                <div class="my-user-icons">
-                                    <i class="fas fa-circle-notch mx-2"></i>
-                                    <i class="fas fa-envelope mx-2"></i>
-                                    <i class="fas fa-ellipsis-vertical mx-2"></i>
-                                </div>
+<body>
+    <div id="app">
+        <div class="container h-100">
+            
+            <div class="row h-100 flex-nowrap">
+                <div class="col-12 col-md-4 bg-white">
+                    <div class="row h-100 flex-column flex-nowrap">
+                        <div class="col-12 header d-flex justify-content-between align-items-center p-2 border-end">
+                            <div class="d-flex align-items-center">
+                                <img src="img/avatar_io.jpg" alt="img-profilo">
+                                <span class="px-1">Augusto</span>
                             </div>
-                            <!-- Notifiche -->
-                            <div class="col-12 d-flex justify-content-start align-items-center bg-notification p-2">
-                                <i class="fas fa-bell-slash"></i>
+                            <div class="my-user-icons">
+                                <i class="fa-solid fa-user-plus" @click="openAddContactPopup"></i>
+                                <i class="fas fa-circle-notch mx-2"></i>
+                                <i class="fas fa-envelope mx-2"></i>
+                                <i class="fas fa-ellipsis-vertical mx-2" ></i>
+                            </div>
+                            <div v-if="isAddContactPopupOpen" class="add-contact-popup">
+    
+   
+                                <div class="popup-content">
+                                        <h3>Aggiungi un nuovo contatto</h3>
+                                        <input type="text" v-model="newContactName" placeholder="Nome del contatto" />
+                                        <input type="text" v-model="newContactIconLink" placeholder="Link all'icona del contatto" />
+                                        <!-- Visualizza l'icona Font Awesome -->
+                                        <i :class="newContactIconLink" style="font-size: 24px;"></i>
+                                        <button @click="addContact">Aggiungi</button>
+                                        <button @click="closeAddContactPopup">Annulla</button>
+                                    </div>
+                                </div>
+                        </div>
+                        <!-- Notifiche -->
+                        <div class="col-12 d-flex justify-content-start align-items-center bg-notification p-2">
+                            <i class="fas fa-bell-slash"></i>
+                            <div>
+                                <span>Ricevi notifiche di nuovi messaggi</span><br>
+                                <span class="color-grey">Attiva notifiche desktop</span>
+                            </div>
+                        </div>
+                        <!-- Barra di ricerca -->
+                        <div class="col-12 p-2 header">
+                            <div class="input-group d-flex align-items-center">
+                                <span class="border-0 input-group-text"><i class="fa-solid fa-magnifying-glass p-1 bg-white"></i></span>
+                                <input type="text" placeholder="Cerca o inizia una nuova chat" class="form-control" v-model="search">
+                            </div>
+                        </div>
+                        <!-- Lista dei contatti -->
+                        <div class="col-12 flex-grow-1 overflow-y-auto py-2 h0">
+                            <div :class="{'active' : index === activeContactIndex}" v-for="(contact, index) in filteredContacts" :key="contact.id" @click="selectContact(contact.id)" class="contact py-1 px-2 border-bottom d-flex">
                                 <div>
-                                    <span>Ricevi notifiche di nuovi messaggi</span><br>
-                                    <span class="color-grey">Attiva notifiche desktop</span>
-                                </div>
-                            </div>
-                            <!-- Barra di ricerca -->
-                            <div class="col-12 p-2 header">
-                                <div class="input-group d-flex  align-items-center">
-                                    <span class="border-0 input-group-text"><i class="fa-solid fa-magnifying-glass p-1 bg-white "></i></span>
-                                    <input  type="text" placeholder="Cerca o inizia una nuova chat" class="form-control" v-model="search">
-                                </div>
-                            </div>
-                            <!-- Lista dei contatti -->
-                            <div class="col-12 flex-grow-1 overflow-y-auto py-2 h0">
-                                <div :class="{'active' : index === activeContactIndex}" v-for="(contact, index) in filteredContacts" :key="contact.id" @click="selectContact(contact.id)" class="contact py-1 px-2 border-bottom d-flex">
-                                    <div>
                                     <img :src="contact.avatar" alt="img-profilo">
-
                                 </div>
                                 <div class="ms-2">
                                     <span class="px-2 align-top">{{ contact.name }}</span><br>
-                                    <small>{{contact.messages[contact.messages.length - 1].message}}</small> 
-                                </div>
+                                    <small class="ms-2">{{contact.messages[contact.messages.length - 1].message}}</small>
                                 </div>
                             </div>
                         </div>
                     </div>
-    
-                    <!-- Finestra di chat -->
-                    <div class="col-12 col-md-8">
-                        <!-- Header della finestra di chat -->
-                        <div class="row h-100 flex-nowrap flex-column">
-                            <div class="col-12 d-flex justify-content-between header p-2">
-                                <div  class="d-flex">
-                                    <img :src="contacts[activeContactIndex].avatar" alt="img-profilo">
-                                    <div class="ms-2">
-                                        <span>{{contacts[activeContactIndex].name}}</span><br>
-                                        <small>Ultimo accesso {{contacts[activeContactIndex].messages[contacts[activeContactIndex].messages.length - 1].date}}</small>
-                                    </div>                            
-                                </div>
-                                <div class="my-user-icons mt-2">
-                                    <i class="fas fa-search mx-2"></i>
-                                    <i class="fas fa-paperclip mx-2"></i>
-                                    <i class="fas fa-ellipsis-vertical mx-2"></i>
+                </div>
+
+                <!-- Finestra di chat -->
+                <div class="col-12 col-md-8">
+                    <!-- Header della finestra di chat -->
+                    <div class="row h-100 flex-nowrap flex-column">
+                        <div class="col-12 d-flex justify-content-between header p-2">
+                            <div class="d-flex">
+                                <img :src="contacts[activeContactIndex].avatar" alt="img-profilo">
+                                <div class="ms-2">
+                                    <span>{{contacts[activeContactIndex].name}}</span><br>
+                                    <small>Ultimo accesso {{contacts[activeContactIndex].messages[contacts[activeContactIndex].messages.length - 1].date}}</small>
                                 </div>
                             </div>
-                            <!-- Chat section -->
-                            <div class="col-12 col-md-8 section-chat flex-grow-1 h0 overflow-y-auto">
+                            <div class="my-user-icons mt-2">
+                                <i class="fas fa-search mx-2"></i>
+                                <i class="fas fa-paperclip mx-2"></i>
+                                <i class="fas fa-ellipsis-vertical mx-2"></i>
+                            </div>
+                            
+                        </div>
+                        <!-- Chat section -->
+                        <div class="col-12 col-md-8 section-chat flex-grow-1 h0 overflow-y-auto">
+  
                             <div class="d-flex py-3" v-for="(msg, index) in contacts[activeContactIndex].messages" :key="index">
-                                <div class="msg" :class="msg.status">{{msg.message}}</div>
-                            </div>
-                            </div>
-                            <!-- Input per i messaggi -->
-                            <div class="col-12 col-md-8 mt-auto header p-2 w-100  ">
-                                <div class="message-input d-flex align-items-center justify-content-between">
-                                    <i class="fa-regular fa-face-smile px-5"></i>
-                                    <input type="text" placeholder="Scrivi un messaggio"  class="w-75 py-2 border-0"v-model="message"
-                                    @keyup.enter="sendMessage">
-                                    <i class="fas fa-microphone px-3"></i>
-                                    <i class="fa-solid fa-paper-plane px-1" style="color: #000000;" @click="sendMessage"></i>
+                                <div class="msg" :class="msg.status">
+                                    {{ msg.message }}
+                                    <i
+                                    class="fa-solid fa-chevron-down d-flex justify-content-end "
+                                    @click="toggleMessageMenu(index)"
+                                    v-if="messageMenuIndex !== index"
+                                ></i>
+                                    <small class="text-date ms-2">{{ getTimeFromDate(msg.date) }}
+                                   
+                                    </small>
+                                    <div class="message-menu" v-if="messageMenuIndex === index">
+                                        <span class="d-flex align-items-center" @click="deleteMessage(index)">Cancella messaggio</span>
+                                    </div>
                                 </div>
+                            </div>
+                        </div>
+                        <!-- Input per i messaggi -->
+                        <div class="col-12 col-md-8 mt-auto header p-2 w-100">
+                            <div class="message-input d-flex align-items-center justify-content-between">
+                                <i class="fa-regular fa-face-smile px-5"></i>
+                                <input type="text" placeholder="Scrivi un messaggio" class="w-75 py-2 border-0" v-model="message" @keyup.enter="sendMessage">
+                                <i class="fas fa-microphone px-3"></i>
+                                <i class="fa-solid fa-paper-plane px-1" style="color: #000000;" @click="sendMessage"></i>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
-        <script src="https://unpkg.com/vue@3"></script>
-        <script src="js/script.js"></script>
+        </div>
+    </div>
+    <script src="https://unpkg.com/vue@3"></script>
+    <script src="js/script.js"></script>
 </body>
 </html>

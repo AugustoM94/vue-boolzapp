@@ -3,10 +3,29 @@ const { createApp } = Vue;
 createApp ({
     data() {
         return {
-          activeContactIndex: 0,
-          message:'',
-          response: '',
-          search: '',         
+       
+          randomReplies: [
+            "Ciao",
+            "Va bene",
+            "Tutto Bene",
+            "Sto, studiando",
+            "Sto arrivando",
+            "Non posso ora",
+            "D'accordo",
+            "Forza Juventus",
+            "Ci vediamo lì",
+            "Verso le 22",
+            "Piove, preferisco non uscire",
+            "Non fare tardi",
+            "Una pizza la mangerei!",
+            "Auguri anche a te",
+            "Per un caffe, ci sono",
+            "Stasera passo",
+            "Si, andiamo a ballare",
+            "Grazie",
+            "Perché no",
+            "Forse un'altra volta"
+          ],         
              contacts: [
                 {
                     id: 1,
@@ -178,10 +197,29 @@ createApp ({
                     ],
                 }
             ],
-    
+            activeContactIndex: 0,
+            message:'',
+            response: '',
+            search: '',
+            messageMenuIndex: null,
+            isAddContactPopupOpen: false,
+            newContactName: '',
+            newContactIconLink: '',
+  
         }
     },
     methods: {
+        getTimeFromDate(date) {
+            time = date.split(" ")[1];
+            hourAndMinutes = time.split(":").slice(0,2).join(":");
+            return hourAndMinutes;
+        },
+    
+        deleteMessage(index) {
+            this.contacts[this.activeContactIndex].messages.splice(index, 1);
+            this.messageMenuIndex = null;
+        },
+ 
         selectContact(id){
             const index = this.contacts.findIndex((contact)=> contact.id === id);
             if(index !== -1){
@@ -189,25 +227,53 @@ createApp ({
             }
         },
         sendMessage() {
-            if (!this.message) return;
-            this.contacts[this.activeContactIndex].messages.push({
-                date: new Date().toLocaleString(),
-                message: this.message,
-                status: 'sent',
-            });
-            this.message = ''; 
-            setTimeout(() => {
+            const messageContent = this.message.trim();
+        
+            if (messageContent) {
                 this.contacts[this.activeContactIndex].messages.push({
                     date: new Date().toLocaleString(),
-                    message: 'ok',
-                    status: 'received',
+                    message: messageContent,
+                    status: 'sent',
                 });
-            }, 1000);
-    }
-},
-        computed: {
-            filteredContacts() {
-                return this.contacts.filter(contact => contact.name.toLowerCase().includes(this.search.toLowerCase()));
-            },
+        
+                this.message = ''
+                
+                setTimeout(() => {
+                    const randomIndex = Math.floor(Math.random() * this.randomReplies.length);
+                    const randomReply = this.randomReplies[randomIndex];
+                    this.contacts[this.activeContactIndex].messages.push({
+                        date: new Date().toLocaleString(),
+                        message: randomReply,
+                        status: 'received',
+                    });
+                }, 1000);
+            }
         },
-}) .mount('#app');
+  
+
+        toggleMessageMenu(index) {
+            if (this.messageMenuIndex === index) {
+                this.messageMenuIndex = null;
+            } else {
+                this.messageMenuIndex = index;
+            }
+        },
+        openAddContactPopup() {
+            this.isAddContactPopupOpen = true;
+            this.newContactName = '';
+            this.newContactIconLink = '';
+        },
+        addContact() {
+            this.closeAddContactPopup();
+        },
+        closeAddContactPopup() {
+            this.isAddContactPopupOpen = false;
+        },
+    },
+    computed: {
+        filteredContacts() {
+          return this.contacts.filter(contact => contact.name.toLowerCase().includes(this.search.toLowerCase()));
+        }
+      },
+
+    }) .mount('#app');
