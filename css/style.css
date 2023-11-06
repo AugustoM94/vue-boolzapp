@@ -32,6 +32,7 @@ img {
     width: 50px;
     border-radius: 50%;
 }
+
 .header {
     background-color: var(--color-headers);
 }
@@ -57,7 +58,7 @@ img {
     padding: .3rem;
     border-radius: 50%;
     width: 30px;
-    margin-right: 5px;
+    margin-right: 10px;
 }
 
 .bg-notification {
@@ -142,8 +143,13 @@ small {
 }
 
 
-
-
-
-
-
+.emoji-container {
+    position: absolute;
+    top: -145px;
+    left: 0;
+    background-color: var(--color-headers);
+    border: 1px solid #ccc;
+    z-index: 999; 
+    max-height: 200px;
+    overflow-y: auto;
+  }

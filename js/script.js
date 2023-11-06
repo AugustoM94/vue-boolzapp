@@ -205,7 +205,11 @@ createApp ({
             isAddContactPopupOpen: false,
             newContactName: '',
             newContactIconLink: '',
-  
+            isTyping: false,
+            contactStatus: '', 
+            emojis: ['😀', '😃', '😄', '😁', '😆', '😅', '😂', '🤣', '😊', '😇', '😍', '🥰', '😋', '😎', '😏', '😐', '😑', '😒', '😓', '😔', '😕', '😖', '😗', '😘', '😙', '😚'],
+            selectedEmoji: '', 
+            isEmojiTableVisible: false, 
         }
     },
     methods: {
@@ -225,18 +229,20 @@ createApp ({
             if(index !== -1){
                 this.activeContactIndex = index;
             }
+            this.contacts[this.activeContactIndex].contactStatus = 'online';
+
         },
         sendMessage() {
             const messageContent = this.message.trim();
         
             if (messageContent) {
+                this.contactStatus = 'sta scrivendo...';
                 this.contacts[this.activeContactIndex].messages.push({
                     date: new Date().toLocaleString(),
                     message: messageContent,
                     status: 'sent',
                 });
-        
-                this.message = ''
+                this.message = '';
                 
                 setTimeout(() => {
                     const randomIndex = Math.floor(Math.random() * this.randomReplies.length);
@@ -246,10 +252,14 @@ createApp ({
                         message: randomReply,
                         status: 'received',
                     });
-                }, 1000);
-            }
-        },
-  
+                    this.contactStatus = 'online';
+                    setTimeout(() => {
+                        this.contactStatus = 'ultimo accesso alle ' + this.getTimeFromDate(new Date());
+                      }, 2000);
+                    }, 2000);
+                  }
+                },
+     
 
         toggleMessageMenu(index) {
             if (this.messageMenuIndex === index) {
@@ -269,7 +279,24 @@ createApp ({
         closeAddContactPopup() {
             this.isAddContactPopupOpen = false;
         },
+        handleTyping() {
+            this.isTyping = this.message.trim() !== '';
+          },    
+          toggleEmojiTable() {
+            this.isEmojiTableVisible = !this.isEmojiTableVisible;
+            if (!this.isEmojiTableVisible) {
+                this.selectedEmoji = '';
+            }
+        },
+        addEmojiToMessage(emoji) {
+            this.message += emoji; 
+          },
+        selectEmoji(emoji) {
+            this.selectedEmoji = emoji;
+           
+    this.isEmojiTableVisible = false;
     },
+},
     computed: {
         filteredContacts() {
           return this.contacts.filter(contact => contact.name.toLowerCase().includes(this.search.toLowerCase()));

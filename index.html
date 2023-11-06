@@ -20,7 +20,7 @@
                     <div class="row h-100 flex-column flex-nowrap">
                         <div class="col-12 header d-flex justify-content-between align-items-center p-2 border-end">
                             <div class="d-flex align-items-center">
-                                <img src="img/avatar_io.jpg" alt="img-profilo">
+                                <img class="img-profilo" src="img/avatar_io.jpg" alt="img-profilo">
                                 <span class="px-1">Augusto</span>
                             </div>
                             <div class="my-user-icons">
@@ -77,13 +77,14 @@
                 <div class="col-12 col-md-8">
                     <!-- Header della finestra di chat -->
                     <div class="row h-100 flex-nowrap flex-column">
-                        <div class="col-12 d-flex justify-content-between header p-2">
+                        <div class="col-12 d-flex justify-content-between header p-2" >
                             <div class="d-flex">
                                 <img :src="contacts[activeContactIndex].avatar" alt="img-profilo">
                                 <div class="ms-2">
-                                    <span>{{contacts[activeContactIndex].name}}</span><br>
-                                    <small>Ultimo accesso {{contacts[activeContactIndex].messages[contacts[activeContactIndex].messages.length - 1].date}}</small>
-                                </div>
+                                    <span>{{ contacts[activeContactIndex].name }}</span><br>
+                                    <small v-if="contactStatus === 'online'">Online</small>
+                                    <small v-else-if="contactStatus === 'sta scrivendo...'">sta Scrivendo...</small>
+                                    <small v-else>Ultimo accesso {{ contactStatus }} {{contacts[activeContactIndex].messages[contacts[activeContactIndex].messages.length - 1].date}}</small>                      </div>
                             </div>
                             <div class="my-user-icons mt-2">
                                 <i class="fas fa-search mx-2"></i>
@@ -91,7 +92,7 @@
                                 <i class="fas fa-ellipsis-vertical mx-2"></i>
                             </div>
                             
-                        </div>
+                        </div>  
                         <!-- Chat section -->
                         <div class="col-12 col-md-8 section-chat flex-grow-1 h0 overflow-y-auto">
   
@@ -99,13 +100,10 @@
                                 <div class="msg" :class="msg.status">
                                     {{ msg.message }}
                                     <i
-                                    class="fa-solid fa-chevron-down d-flex justify-content-end "
-                                    @click="toggleMessageMenu(index)"
-                                    v-if="messageMenuIndex !== index"
-                                ></i>
-                                    <small class="text-date ms-2">{{ getTimeFromDate(msg.date) }}
-                                   
-                                    </small>
+                                        class="fa-solid fa-chevron-down d-flex justify-content-end "
+                                        @click="toggleMessageMenu(index)"
+                                    ></i>
+                                    <small class="text-date ms-2">{{ getTimeFromDate(msg.date) }}</small>
                                     <div class="message-menu" v-if="messageMenuIndex === index">
                                         <span class="d-flex align-items-center" @click="deleteMessage(index)">Cancella messaggio</span>
                                     </div>
@@ -113,12 +111,20 @@
                             </div>
                         </div>
                         <!-- Input per i messaggi -->
-                        <div class="col-12 col-md-8 mt-auto header p-2 w-100">
+                        <div class="col-12 col-md-8 mt-auto header p-2 w-100 position-relative">
                             <div class="message-input d-flex align-items-center justify-content-between">
-                                <i class="fa-regular fa-face-smile px-5"></i>
-                                <input type="text" placeholder="Scrivi un messaggio" class="w-75 py-2 border-0" v-model="message" @keyup.enter="sendMessage">
-                                <i class="fas fa-microphone px-3"></i>
-                                <i class="fa-solid fa-paper-plane px-1" style="color: #000000;" @click="sendMessage"></i>
+                                <i class="fa-regular fa-face-smile px-5" @click.stop="toggleEmojiTable"></i>
+                                <div class="emoji-container" v-if="isEmojiTableVisible" >
+                                    <table>
+                                        <tr v-for="row in Math.ceil(emojis.length / 5)">
+                                            <td v-for="index in 5">
+                                                <span v-if="(row - 1) * 5 + index <= emojis.length" @click="addEmojiToMessage(emojis[(row - 1) * 5 + index - 1])">{{emojis[(row - 1) * 5 + index - 1]}}</span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <input type="text" placeholder="Scrivi un messaggio" class="w-75 py-2 border-0" v-model="message" @input="handleTyping" @keyup.enter="sendMessage">
+                                <i class="fas px-3":class="{ 'fa-microphone': !isTyping, 'fa-paper-plane': isTyping }":style="{ color: isTyping ? '#000000' : '' }"@click="isTyping ? sendMessage() : null"></i>                                
                             </div>
                         </div>
                     </div>
